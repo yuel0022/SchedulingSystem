@@ -12,12 +12,41 @@ public class ProjectPlan {
 	private Date endDate;
 	private List<Task> tasks;
 	
+	public ProjectPlan(String code) {
+		this(code, null, null);
+	}
+	
 	public ProjectPlan(String code, String name, Date startDate) {
 		this.code = code;
 		this.name = name;
 		this.startDate = startDate;
-		this.endDate = null;
+		this.endDate = startDate;
 		this.tasks = new ArrayList<Task>();
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null || !(obj instanceof ProjectPlan)) {
+			return false;
+		}
+		
+		if (this == obj) {
+			return true;
+		}
+		
+		return this.code.equals(((ProjectPlan)obj).getCode());
+	}
+	
+	@Override
+	public int hashCode() {
+		int prime = 31;
+		int result = 1;
+		result = prime * result + ((this.code == null) ? 0 : this.code.hashCode());
+		return result;
+	}
+	
+	public List<Task> getAllTasks() {
+		return this.tasks;
 	}
 	
 	public void addTask(Task task) {

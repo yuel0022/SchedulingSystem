@@ -39,6 +39,27 @@ public class CreateTaskScreen extends Screen {
 		int duration = 0;
 		String parentTaskCode = null;
 		
+		// if list of plans is empty, return to main screen
+		/*if (getController().isPlanListEmpty()) {
+			System.out.println("There are no project plans created yet. Please create a project plan.\n");
+			return Screen.PLAN_CREATE_SCREEN;
+		}*/
+		
+		System.out.println("Enter Project Plan Code (or press "+EXIT_KEY+" to return:");
+		/*do {
+			code = scanner.next();
+			
+			if (EXIT_KEY.equals(code)) {
+				return this.getPreviousScreen();
+			}
+		} while (!getController().isPlanExisting(code));
+		
+		System.out.println("Enter Task Code (Must consist of four alphanumeric characters):");
+		
+		do {
+			code = scanner.next();
+		} while (!getController().isCodeValid(code) && getController().isTaskExisting(code));*/
+		
 		System.out.println("Enter Task Name:");
 		
 		name = scanner.next();

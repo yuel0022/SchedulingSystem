@@ -2,6 +2,7 @@ package com.screen.main.plans;
 
 import java.util.Scanner;
 
+import com.model.ProjectPlan;
 import com.screen.Screen;
 
 public class ViewPlanScreen extends Screen {
@@ -30,7 +31,7 @@ public class ViewPlanScreen extends Screen {
 	@Override
 	public Screen acceptCommand() {
 		Scanner scanner = getController().getScanner();
-		boolean planExists = false;
+		ProjectPlan plan = null;
 		String code = null;
 		
 		System.out.println("Enter plan code (or press "+EXIT_KEY+" to exit):");
@@ -42,8 +43,14 @@ public class ViewPlanScreen extends Screen {
 				return this.getPreviousScreen();
 			}
 			
-			// plan = getController().getPlanCode(code);
-		} while(!planExists);
+			plan = getController().getPlan(code);
+			
+			if (plan == null) {
+				System.out.println("Project with Plan Code " + code + " does not exist.");
+			}
+		} while(plan == null);
+		
+		this.displayPlan(plan);
 		
 		return Screen.MAIN_SCREEN;
 	}

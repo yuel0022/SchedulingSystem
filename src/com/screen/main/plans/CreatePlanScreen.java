@@ -28,6 +28,7 @@ public class CreatePlanScreen extends Screen {
 	@Override
 	public Screen acceptCommand() {
 		Scanner scanner = getController().getScanner();
+		boolean validCode = false;
 		String code = null;
 		String name = null;
 		String date = null;
@@ -36,7 +37,15 @@ public class CreatePlanScreen extends Screen {
 		
 		do {
 			code = scanner.next();
-		} while (!getController().isCodeValid(code) || getController().isCodeAlreadyExisting(code));
+			
+			if (getController().isCodeValid(code)) {
+				if (getController().isCodeAlreadyExisting(code)) {
+					System.out.println("Code already exists.");
+				} else {
+					validCode = true;
+				}
+			}
+		} while (!validCode);
 		
 		System.out.println("Enter Plan Name:");
 		
@@ -47,6 +56,8 @@ public class CreatePlanScreen extends Screen {
 		do {
 			date = scanner.next();
 		} while (!getController().isValidDate(date));
+		
+		getController().createPlan(code, name, date);
 		
 		System.out.println("Plan successfully created.\n\n");
 		

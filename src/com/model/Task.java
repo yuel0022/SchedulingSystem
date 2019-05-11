@@ -13,6 +13,11 @@ public class Task {
 	private Date endDate;
 	private List<Task> parentTasks;
 	private List<Task> childTasks;
+	private ProjectPlan plan;
+	
+	public Task(String code) {
+		this(code, null, 0);
+	}
 	
 	public Task(String code, String name, int duration) {
 		this.code = code;
@@ -81,5 +86,13 @@ public class Task {
 
 	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
+	}
+
+	public ProjectPlan getPlan() {
+		return plan;
+	}
+
+	public void setPlan(ProjectPlan plan) {
+		this.plan = plan;
 	}
 }

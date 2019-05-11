@@ -42,7 +42,11 @@ public class DeletePlanScreen extends Screen {
 				return this.getPreviousScreen();
 			}
 			
-			// planExists = getController().deletePlanCode(code);
+			planExists = getController().deletePlan(code);
+			
+			if (!planExists) {
+				System.out.println("Project with Plan Code " + code + " does not exist.");
+			}
 		} while(!planExists);
 		
 		System.out.println("Plan successfully deleted.");

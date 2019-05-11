@@ -48,9 +48,17 @@ public class PlanScreen extends Screen {
 			if (INPUT_CREATE.equals(input)) {
 				return Screen.PLAN_CREATE_SCREEN;
 			} else if (INPUT_VIEW.equals(input)) {
-				return Screen.PLAN_VIEW_SCREEN;
+				if (getController().hasExistingPlans()) {
+					return Screen.PLAN_VIEW_SCREEN;
+				}
+				System.out.println(Screen.MSG_NO_EXISTING_PLANS);
+				return this;
 			} else if (INPUT_DELETE.equals(input)) {
-				return Screen.PLAN_DELETE_SCREEN;
+				if (getController().hasExistingPlans()) {
+					return Screen.PLAN_DELETE_SCREEN;
+				}
+				System.out.println(Screen.MSG_NO_EXISTING_PLANS);
+				return this;
 			} else if (INPUT_RETURN.equals(input)) {
 				return this.getPreviousScreen();
 			} else {
