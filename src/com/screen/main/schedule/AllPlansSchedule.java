@@ -7,7 +7,7 @@ import com.screen.Screen;
 public class AllPlansSchedule extends Screen {
 
 	private static Screen screen = null;
-	private final String EXIT_KEY = "1";
+	private final String EXIT_KEY = "E";
 	
 	private AllPlansSchedule() {
 		this.setPreviousScreen(Screen.VIEW_SCHEDULE_SCREEN);

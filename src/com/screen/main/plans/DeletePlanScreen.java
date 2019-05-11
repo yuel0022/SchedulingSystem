@@ -8,6 +8,8 @@ public class DeletePlanScreen extends Screen {
 
 	private static Screen screen = null;
 	
+	private String EXIT_KEY = "E";
+	
 	private DeletePlanScreen() {
 		this.setPreviousScreen(Screen.PLAN_SCREEN);
 	}
@@ -28,17 +30,24 @@ public class DeletePlanScreen extends Screen {
 	@Override
 	public Screen acceptCommand() {
 		Scanner scanner = getController().getScanner();
-		String input = null;
+		boolean planExists = false;
+		String code = null;
 		
-		System.out.println("Enter plan code to delete:");
+		System.out.println("Enter plan code (or press "+EXIT_KEY+" to exit):");
 		
-		input = scanner.next();
+		do {
+			code = scanner.next();
+			
+			if (EXIT_KEY.equals(code.toUpperCase())) {
+				return this.getPreviousScreen();
+			}
+			
+			// planExists = getController().deletePlanCode(code);
+		} while(!planExists);
 		
-		if (input != null && input.equals("1")) {
-			return this.getPreviousScreen();
-		}
+		System.out.println("Plan successfully deleted.");
 		
-		return this;
+		return Screen.MAIN_SCREEN;
 	}
 
 }

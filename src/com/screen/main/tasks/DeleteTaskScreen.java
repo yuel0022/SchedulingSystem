@@ -8,6 +8,8 @@ public class DeleteTaskScreen extends Screen {
 
 	private static Screen screen = null;
 	
+	private String EXIT_KEY = "E";
+	
 	private DeleteTaskScreen() {
 		this.setPreviousScreen(Screen.TASK_SCREEN);
 	}
@@ -28,17 +30,24 @@ public class DeleteTaskScreen extends Screen {
 	@Override
 	public Screen acceptCommand() {
 		Scanner scanner = getController().getScanner();
-		String input = null;
+		boolean taskExists = false;
+		String code = null;
 		
-		System.out.println("Enter task code to delete:");
+		System.out.println("Enter task code (or press "+EXIT_KEY+" to exit):");
 		
-		input = scanner.next();
+		do {
+			code = scanner.next();
+			
+			if (EXIT_KEY.equals(code.toUpperCase())) {
+				return this.getPreviousScreen();
+			}
+			
+			// planExists = getController().deleteTaskCode(code);
+		} while(!taskExists);
 		
-		if (input != null && input.equals("1")) {
-			return this.getPreviousScreen();
-		}
+		System.out.println("Task successfully deleted.");
 		
-		return this;
+		return Screen.MAIN_SCREEN;
 	}
 
 }

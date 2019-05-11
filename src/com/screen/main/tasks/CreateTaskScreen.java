@@ -8,6 +8,8 @@ public class CreateTaskScreen extends Screen {
 
 	private static Screen screen = null;
 	
+	private final String EXIT_KEY = "E";
+	
 	private CreateTaskScreen() {
 		this.setPreviousScreen(Screen.TASK_SCREEN);
 	}
@@ -28,29 +30,49 @@ public class CreateTaskScreen extends Screen {
 	@Override
 	public Screen acceptCommand() {
 		Scanner scanner = getController().getScanner();
+		boolean isValidDuration = false;
+		boolean parentTaskExists = false;
+		
 		String input = null;
-		
-		System.out.println("Enter Task Code (Must consist of four alphanumeric characters):");
-		
-		input = scanner.next();
+		String code = null;
+		String name = null;
+		int duration = 0;
+		String parentTaskCode = null;
 		
 		System.out.println("Enter Task Name:");
 		
-		input = scanner.next();
+		name = scanner.next();
 		
 		System.out.println("Enter Duration (Number of days):");
 		
-		input = scanner.next();
-		
-		System.out.println("Enter Parent Task (The task on which this task will be dependent on. Leave blank if this task is not dependent on another task.):");
-		
-		input = scanner.next();
-		
-		if (input != null && input.equals("1")) {
-			return this.getPreviousScreen();
+		while (!isValidDuration) {
+			input = scanner.next();
+			
+			if (!input.matches("[0-9]")) {
+				System.out.println("Invalid number format. Please try again.");
+			} else {
+				duration = Integer.parseInt(input);
+				
+				if (duration <= 0) {
+					System.out.println("Invalid value. Duration should be an integer value greater than zero.");
+				} else {
+					isValidDuration = true;
+				}
+			}
 		}
 		
-		return this;
+		System.out.println("Enter Parent Task (The task on which this task will be dependent on. Press "+EXIT_KEY+" to stop entering tasks and proceed):");
+		
+		while (!parentTaskExists) {
+			parentTaskCode = scanner.next();
+			
+			// parentTaskExists = getController().isTaskExisting(parentTaskCode);
+			parentTaskExists = EXIT_KEY.equals(parentTaskCode);
+		}
+		
+		System.out.println("Task has been created.");
+		
+		return Screen.MAIN_SCREEN;
 	}
 
 }

@@ -48,7 +48,7 @@ public class TaskScreen extends Screen {
 			if (INPUT_CREATE.equals(input)) {
 				return Screen.TASK_CREATE_SCREEN;
 			} else if (INPUT_VIEW.equals(input)) {
-				return Screen.TASK_VIEW_SCREEN;
+				return Screen.TASK_EDIT_SCREEN;
 			} else if (INPUT_DELETE.equals(input)) {
 				return Screen.TASK_DELETE_SCREEN;
 			} else if (INPUT_RETURN.equals(input)) {

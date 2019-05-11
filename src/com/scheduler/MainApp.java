@@ -18,7 +18,7 @@ public class MainApp {
 		Screen.PLAN_VIEW_SCREEN.setController(controller);
 		Screen.TASK_CREATE_SCREEN.setController(controller);
 		Screen.TASK_DELETE_SCREEN.setController(controller);
-		Screen.TASK_VIEW_SCREEN.setController(controller);
+		Screen.TASK_EDIT_SCREEN.setController(controller);
 		Screen.SCHEDULE_SINGLE_PLAN_SCREEN.setController(controller);
 		Screen.SCHEDULE_ALL_PLANS_SCREEN.setController(controller);
 		

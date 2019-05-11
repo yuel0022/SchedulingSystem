@@ -28,25 +28,29 @@ public class CreatePlanScreen extends Screen {
 	@Override
 	public Screen acceptCommand() {
 		Scanner scanner = getController().getScanner();
-		String input = null;
+		String code = null;
+		String name = null;
+		String date = null;
 		
 		System.out.println("Enter Plan Code (Must consist of four alphanumeric characters):");
 		
-		input = scanner.next();
+		do {
+			code = scanner.next();
+		} while (!getController().isCodeValid(code) || getController().isCodeAlreadyExisting(code));
 		
 		System.out.println("Enter Plan Name:");
 		
-		input = scanner.next();
+		name = scanner.next();
 		
-		System.out.println("Enter Start Date:");
+		System.out.println("Enter Start Date (mm/dd/yyyy):");
 		
-		input = scanner.next();
+		do {
+			date = scanner.next();
+		} while (!getController().isValidDate(date));
 		
-		if (input != null && input.equals("1")) {
-			return this.getPreviousScreen();
-		}
+		System.out.println("Plan successfully created.\n\n");
 		
-		return this;
+		return Screen.MAIN_SCREEN;
 	}
 
 }

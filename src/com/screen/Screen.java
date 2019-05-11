@@ -32,7 +32,7 @@ public abstract class Screen {
 	/* Task Screen */
 	public static final Screen TASK_CREATE_SCREEN = CreateTaskScreen.getInstance();
 	public static final Screen TASK_DELETE_SCREEN = DeleteTaskScreen.getInstance();
-	public static final Screen TASK_VIEW_SCREEN = EditTaskScreen.getInstance();
+	public static final Screen TASK_EDIT_SCREEN = EditTaskScreen.getInstance();
 	
 	/* Schedule Screen */
 	public static final Screen SCHEDULE_SINGLE_PLAN_SCREEN = SinglePlanSchedule.getInstance();
