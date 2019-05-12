@@ -2,6 +2,7 @@ package com.screen.main.tasks;
 
 import java.util.Scanner;
 
+import com.scheduler.GenUtil;
 import com.screen.Screen;
 
 public class EditTaskScreen extends Screen {
@@ -31,11 +32,8 @@ public class EditTaskScreen extends Screen {
 	@Override
 	public Screen acceptCommand() {
 		Scanner scanner = getController().getScanner();
-		boolean taskExists = false;
-		boolean isValidDuration = false;
 		boolean parentTaskExists = false;
 		
-		String input = null;
 		String code = null;
 		String name = null;
 		int duration = 0;
@@ -43,15 +41,19 @@ public class EditTaskScreen extends Screen {
 		
 		System.out.println("Enter task code (or press "+EXIT_KEY+" to exit):");
 		
-		do {
+		while (true) {
 			code = scanner.next();
 			
 			if (EXIT_KEY.equals(code.toUpperCase())) {
 				return this.getPreviousScreen();
 			}
 			
-			// taskExists = getController().getTaskCode(code);
-		} while(!taskExists);
+			if (getController().isTaskExisting(code)) {
+				break;
+			}
+			
+			System.out.println("Task with code " + code + " does not exist.");
+		}
 		
 		System.out.println("Enter Task Name:");
 		
@@ -59,21 +61,7 @@ public class EditTaskScreen extends Screen {
 		
 		System.out.println("Enter Duration (Number of days):");
 		
-		while (!isValidDuration) {
-			input = scanner.next();
-			
-			if (!input.matches("[0-9]")) {
-				System.out.println("Invalid number format. Please try again.");
-			} else {
-				duration = Integer.parseInt(input);
-				
-				if (duration <= 0) {
-					System.out.println("Invalid value. Duration should be an integer value greater than zero.");
-				} else {
-					isValidDuration = true;
-				}
-			}
-		}
+		duration = GenUtil.getDuration(scanner);
 		
 		System.out.println("Enter Parent Task (The task on which this task will be dependent on. Press "+NO_PARENT_TASK+" if this task is not dependent on another task.):");
 		

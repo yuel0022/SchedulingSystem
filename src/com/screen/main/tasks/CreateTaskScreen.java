@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import com.scheduler.GenUtil;
 import com.screen.Screen;
 
 public class CreateTaskScreen extends Screen {
@@ -33,10 +34,8 @@ public class CreateTaskScreen extends Screen {
 	@Override
 	public Screen acceptCommand() {
 		Scanner scanner = getController().getScanner();
-		boolean isValidDuration = false;
 		boolean validCode = false;
 		
-		String input = null;
 		String planCode = null;
 		String taskCode = null;
 		String name = null;
@@ -91,21 +90,7 @@ public class CreateTaskScreen extends Screen {
 		
 		System.out.println("Enter Duration (Number of days):");
 		
-		while (!isValidDuration) {
-			input = scanner.next();
-			
-			if (!input.matches("[0-9]*")) {
-				System.out.println("Invalid number format. Please try again.");
-			} else {
-				duration = Integer.parseInt(input);
-				
-				if (duration <= 0) {
-					System.out.println("Invalid value. Duration should be an integer value greater than zero.");
-				} else {
-					isValidDuration = true;
-				}
-			}
-		}
+		duration = GenUtil.getDuration(scanner);
 		
 		System.out.println("Enter Parent Task(s) (The task on which this task will be dependent on. Press "+EXIT_KEY+" to stop entering tasks and proceed):");
 		System.out.println("NOTE: Parent tasks should belong to the same project plan as this task.");
