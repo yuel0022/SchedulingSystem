@@ -2,14 +2,13 @@ package com.screen.main.schedule;
 
 import java.util.Scanner;
 
+import com.model.ProjectPlan;
 import com.screen.Screen;
 
 public class SinglePlanSchedule extends Screen {
 
 	private static Screen screen = null;
 	private final String EXIT_KEY = "E";
-	private final String EDIT_TASK_KEY = "E";
-	private final String DELETE_TASK_KEY = "D";
 	
 	private SinglePlanSchedule() {
 		this.setPreviousScreen(Screen.VIEW_SCHEDULE_SCREEN);
@@ -31,33 +30,32 @@ public class SinglePlanSchedule extends Screen {
 	@Override
 	public Screen acceptCommand() {
 		Scanner scanner = getController().getScanner();
-		boolean planExists = false;
-		String input = null;
+		ProjectPlan plan = null;
+		String code = null;
 		
 		System.out.println("Enter plan code (or press "+EXIT_KEY+" to exit):");
 		
 		do {
-			input = scanner.next();
+			code = scanner.next();
 			
-			if (EXIT_KEY.equals(input.toUpperCase())) {
+			if (EXIT_KEY.equals(code)) {
 				return this.getPreviousScreen();
 			}
 			
-			// plan = getController().getPlanCode(input);
-		} while(!planExists);
+			plan = getController().getPlan(code);
+			
+			if (plan == null) {
+				System.out.println("Project with Plan Code " + code + " does not exist.");
+			}
+		} while(plan == null);
 		
-		System.out.println("Press "+EDIT_TASK_KEY+" if you want to go to EDIT TASK screen. Or press "+DELETE_TASK_KEY+" if you want to go to DELETE TASK screen.");
+		this.displayPlan(plan, true);
 		
-		input = scanner.next();
+		System.out.println("Press ENTER to return to previous screen.");
 		
-		if (EDIT_TASK_KEY.equals(input)) {
-			return Screen.TASK_EDIT_SCREEN;
-		}
-		if (DELETE_TASK_KEY.equals(input)) {
-			return Screen.TASK_DELETE_SCREEN;
-		}
+		code = scanner.next();
 		
-		return Screen.MAIN_SCREEN;
+		return this.getPreviousScreen();
 	}
 
 }

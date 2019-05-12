@@ -57,26 +57,44 @@ public abstract class Screen {
 	
 	public abstract Screen acceptCommand();
 	
+	protected void displayAllPlans() {
+		List<ProjectPlan> plans = getController().getAllPlans();
+		
+		for (ProjectPlan plan : plans) {
+			this.displayPlan(plan, true);
+		}
+	}
+	
+	/**
+	 * Display project plan information without displaying information on its existing tasks.
+	 * @param plan
+	 */
+	protected void displayPlan(ProjectPlan plan) {
+		this.displayPlan(plan, false);
+	}
+	
 	/**
 	 * Displays project plan information.
 	 * @param plan The project plan.
+	 * @param showTasks Show tasks if true.
 	 */
-	protected void displayPlan(ProjectPlan plan) {
+	protected void displayPlan(ProjectPlan plan, boolean showTasks) {
 		if (plan == null) {
 			System.out.println("Error displaying plan - no available information.");
 			return;
 		}
 		List<Task> tasks = plan.getAllTasks();
-		System.out.println("\t\tPROJECT PLAN INFORMATION\n");
 		System.out.println("Code: " + plan.getCode());
 		System.out.println("Name: " + plan.getName());
 		
-		if (tasks == null || tasks.size() > 0) {
-			System.out.println("No registered tasks yet.");
-		} else {
-			System.out.println("Tasks:");
-			for (Task task : tasks) {
-				this.displayTask(task);
+		if (showTasks) {
+			if (tasks == null || tasks.isEmpty()) {
+				System.out.println("No registered tasks yet.");
+			} else {
+				System.out.println("Tasks:");
+				for (Task task : tasks) {
+					this.displayTask(task);
+				}
 			}
 		}
 		

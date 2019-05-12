@@ -176,4 +176,8 @@ public class MainController {
 	public void setScanner(Scanner scanner) {
 		this.scanner = scanner;
 	}
+	
+	public List<ProjectPlan> getAllPlans() {
+		return this.plans;
+	}
 }

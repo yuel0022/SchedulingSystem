@@ -50,7 +50,11 @@ public class MainScreen extends Screen {
 			} else if (INPUT_TASKS.equals(input)) {
 				return Screen.TASK_SCREEN;
 			} else if (INPUT_SCHED.equals(input)) {
-				return Screen.VIEW_SCHEDULE_SCREEN;
+				if (getController().hasExistingPlans()) {
+					return Screen.VIEW_SCHEDULE_SCREEN;
+				}
+				System.out.println(Screen.MSG_NO_EXISTING_PLANS);
+				return this;
 			} else if (INPUT_EXIT.equals(input)) {
 				return Screen.EXIT;
 			} else {
