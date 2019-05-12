@@ -1,5 +1,6 @@
 package com.screen.main.schedule;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 import com.screen.Screen;
@@ -33,7 +34,12 @@ public class AllPlansSchedule extends Screen {
 		
 		this.displayAllPlans();
 		
-		input = scanner.next();
+		try {
+			System.in.read();
+		} catch (IOException e) {
+			System.out.println("Error reading command.");
+			e.printStackTrace();
+		}
 		
 		return this.getPreviousScreen();
 	}

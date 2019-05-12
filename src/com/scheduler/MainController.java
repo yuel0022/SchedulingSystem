@@ -89,6 +89,48 @@ public class MainController {
 	}
 	
 	/**
+	 * Gets task by code. Returns null if task is not found.
+	 * @param code
+	 * @return
+	 */
+	public Task getTask(String code) {
+		Task task = null;
+		
+		for (Task existingTask : tasks) {
+			if (existingTask.getCode().contentEquals(code)) {
+				task = existingTask;
+				break;
+			}
+		}
+		
+		return task;
+	}
+	
+	public void createTask(String planCode, String taskCode, String name, int duration, List<String> parentTasks) {
+		ProjectPlan plan = this.getPlan(planCode);
+		
+		if (plan == null) {
+			System.out.println("Error creating task: project plan not found.");
+			return;
+		}
+		
+		// build link between plan and task
+		Task task = new Task(taskCode, name, duration, plan);
+		plan.addTask(task);
+		
+		// build links between the new task and its parent tasks
+		for (String code : parentTasks) {
+			Task parentTask = this.getTask(code);
+			task.addParentTask(parentTask);
+		}
+		
+		// calculate start date and end date of new task
+		task.recalculateSchedule();
+		
+		this.tasks.add(task);
+	}
+	
+	/**
 	 * Validates plan or task Code. Code must be four letters long and should consist of only
 	 * alphanumeric characters. 
 	 * @param code The plan/task code.
@@ -129,6 +171,27 @@ public class MainController {
 	 */
 	public boolean isTaskExisting(String code) {
 		return this.tasks.contains(new Task(code));
+	}
+	
+	public boolean isTaskInTheSamePlan(String taskCode, String planCode) {
+		Task task = this.getTask(taskCode);
+		return (task != null && task.getPlan().getCode().equals(planCode));
+	}
+	
+	/**
+	 * Checks if the parent task code belongs to the tasks dependent on the task being edited.
+	 * @param taskCode
+	 * @param parentTaskCode
+	 * @return
+	 */
+	public boolean isChildTask(String taskCode, String parentTaskCode) {
+		Task task = this.getTask(taskCode);
+		
+		if (task != null) {
+			return task.isChildTask(parentTaskCode);
+		}
+		
+		return false;
 	}
 	
 	/**

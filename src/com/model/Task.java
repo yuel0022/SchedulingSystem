@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.scheduler.GenUtil;
+
 public class Task {
 
 	private String code;
@@ -14,17 +16,107 @@ public class Task {
 	private List<Task> parentTasks;
 	private List<Task> childTasks;
 	private ProjectPlan plan;
+	boolean deleted = false;
 	
 	public Task(String code) {
-		this(code, null, 0);
+		this(code, null, 0, null);
 	}
 	
-	public Task(String code, String name, int duration) {
+	public Task(String code, String name, int duration, ProjectPlan plan) {
 		this.code = code;
-		this.name = name;
-		this.duration = duration;
-		parentTasks = new ArrayList<Task>();
-		childTasks = new ArrayList<Task>();
+		if (plan != null) {
+			this.name = name;
+			this.duration = duration;
+			this.plan = plan;
+			this.startDate = plan.getStartDate();
+			this.endDate = GenUtil.addDays(this.startDate, duration - 1);
+			parentTasks = new ArrayList<Task>();
+			childTasks = new ArrayList<Task>();
+		}
+	}
+	
+	/**
+	 * Recalculate the schedule of this task and then notifies its child tasks that an update has been made.
+	 */
+	public void recalculateSchedule() {
+		Date maxEndDate = null;
+		Date newStartDate = null;
+		
+		for (Task parentTask : parentTasks) {
+			if (maxEndDate == null || maxEndDate.compareTo(parentTask.getEndDate()) < 0) {
+				maxEndDate = parentTask.getEndDate();
+			}
+		}
+		
+		newStartDate = (maxEndDate == null) ? this.getPlan().getStartDate() : GenUtil.addDays(maxEndDate, 1);
+		
+		if (newStartDate.compareTo(this.startDate) != 0) {
+			this.startDate = newStartDate;
+			this.endDate = GenUtil.addDays(this.startDate, duration - 1);
+			for (Task childTask : childTasks) {
+				childTask.notifyChanges(this);
+			}
+		}
+	}
+	
+	public void addParentTask(Task task) {
+		if (!parentTasks.contains(task)) {
+			parentTasks.add(task);
+			task.addChildTask(this);
+		}
+	}
+	
+	public boolean removeParentTask(Task task) {
+		boolean hasTaskRemoved = parentTasks.remove(task);
+		
+		if (hasTaskRemoved) {
+			task.removeChildTask(this);
+		}
+		
+		return hasTaskRemoved;
+	}
+	
+	public void addChildTask(Task task) {
+		if (!childTasks.contains(task)) {
+			childTasks.add(task);
+		}
+	}
+	
+	public boolean removeChildTask(Task task) {
+		return childTasks.remove(task);
+	}
+	
+	/**
+	 * Checks if the parent task code belongs to the tasks dependent on the task being edited.
+	 * @param code
+	 * @return
+	 */
+	public boolean isChildTask(String code) {
+		boolean isChild = false;
+		
+		for (Task child : childTasks) {
+			if (child.getCode().equals(code)) {
+				return true;
+			} else {
+				isChild = child.isChildTask(code);
+			}
+		}
+		
+		return isChild;
+	}
+	
+	/**
+	 * Notify this task that a linked task has recently been modified/deleted.
+	 * @param task
+	 */
+	private void notifyChanges(Task task) {
+		if (task.isDeleted()) {
+			if (!task.removeParentTask(task)) {
+				task.removeChildTask(task);
+			}
+		}
+		
+		this.recalculateSchedule();
 	}
 	
 	@Override
@@ -94,5 +186,9 @@ public class Task {
 
 	public void setPlan(ProjectPlan plan) {
 		this.plan = plan;
+	}
+	
+	public boolean isDeleted() {
+		return deleted;
 	}
 }

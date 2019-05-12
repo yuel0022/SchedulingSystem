@@ -1,5 +1,6 @@
 package com.screen.main.schedule;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 import com.model.ProjectPlan;
@@ -53,7 +54,12 @@ public class SinglePlanSchedule extends Screen {
 		
 		System.out.println("Press ENTER to return to previous screen.");
 		
-		code = scanner.next();
+		try {
+			System.in.read();
+		} catch (IOException e) {
+			System.out.println("Error reading command.");
+			e.printStackTrace();
+		}
 		
 		return this.getPreviousScreen();
 	}
