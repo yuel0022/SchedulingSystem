@@ -48,9 +48,16 @@ public class TaskScreen extends Screen {
 			if (INPUT_CREATE.equals(input)) {
 				return Screen.TASK_CREATE_SCREEN;
 			} else if (INPUT_VIEW.equals(input)) {
-				return Screen.TASK_EDIT_SCREEN;
+				if (getController().hasExistingTasks()) {
+					return Screen.TASK_EDIT_SCREEN;
+				}
+				System.out.println(Screen.MSG_NO_EXISTING_TASKS);
+				return this;
 			} else if (INPUT_DELETE.equals(input)) {
-				return Screen.TASK_DELETE_SCREEN;
+				if (getController().hasExistingTasks()) {
+					return Screen.TASK_DELETE_SCREEN;
+				}
+				return this;
 			} else if (INPUT_RETURN.equals(input)) {
 				return this.getPreviousScreen();
 			} else {

@@ -30,20 +30,24 @@ public class DeleteTaskScreen extends Screen {
 	@Override
 	public Screen acceptCommand() {
 		Scanner scanner = getController().getScanner();
-		boolean taskExists = false;
 		String code = null;
 		
 		System.out.println("Enter task code (or press "+EXIT_KEY+" to exit):");
 		
-		do {
+		while (true) {
 			code = scanner.next();
 			
 			if (EXIT_KEY.equals(code)) {
 				return this.getPreviousScreen();
 			}
 			
-			// planExists = getController().deleteTaskCode(code);
-		} while(!taskExists);
+			if (getController().isTaskExisting(code)) {
+				getController().deleteTask(code);
+				break;
+			}
+			
+			System.out.println("Task with code " + code + " does not exist.");
+		}
 		
 		System.out.println("Task successfully deleted.");
 		

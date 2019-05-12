@@ -139,12 +139,21 @@ public class MainController {
 		for (String parentTaskCode : parentTasks) {
 			Task parentTask = this.getTask(parentTaskCode);
 			
-			if (!task.removeParentTask(parentTask)) {
+			if (task.removeParentTask(parentTask)) {
+				parentTask.removeChildTask(task);
+			} else {
 				task.addParentTask(parentTask);
 			}
 		}
 		
 		task.recalculateSchedule();
+	}
+	
+	public void deleteTask(String code) {
+		Task task = this.getTask(code);
+		if(this.tasks.remove(task)) {
+			task.delete();
+		}
 	}
 	
 	/**

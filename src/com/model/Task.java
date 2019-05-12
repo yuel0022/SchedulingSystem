@@ -71,10 +71,6 @@ public class Task {
 	public boolean removeParentTask(Task task) {
 		boolean hasTaskRemoved = parentTasks.remove(task);
 		
-		if (hasTaskRemoved) {
-			task.removeChildTask(this);
-		}
-		
 		return hasTaskRemoved;
 	}
 	
@@ -86,6 +82,24 @@ public class Task {
 	
 	public boolean removeChildTask(Task task) {
 		return childTasks.remove(task);
+	}
+	
+	public void delete() {
+		this.deleted = true;
+		
+		for (Task parentTask : parentTasks) {
+			parentTask.removeChildTask(this);
+		}
+		
+		parentTasks.clear();
+		
+		for (Task childTask : childTasks) {
+			childTask.notifyChanges(this);
+		}
+		
+		childTasks.clear();
+		
+		this.plan.removeTask(this);
 	}
 	
 	/**
@@ -108,14 +122,12 @@ public class Task {
 	}
 	
 	/**
-	 * Notify this task that a linked task has recently been modified/deleted.
+	 * Notify this task that its parent task has recently been modified/deleted.
 	 * @param task
 	 */
 	private void notifyChanges(Task task) {
 		if (task.isDeleted()) {
-			if (!task.removeParentTask(task)) {
-				task.removeChildTask(task);
-			}
+			this.removeParentTask(task);
 		}
 		
 		this.recalculateSchedule();
