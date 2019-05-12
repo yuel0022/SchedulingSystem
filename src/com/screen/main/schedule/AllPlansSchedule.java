@@ -1,7 +1,6 @@
 package com.screen.main.schedule;
 
 import java.io.IOException;
-import java.util.Scanner;
 
 import com.screen.Screen;
 
@@ -29,9 +28,6 @@ public class AllPlansSchedule extends Screen {
 
 	@Override
 	public Screen acceptCommand() {
-		Scanner scanner = getController().getScanner();
-		String input = null;
-		
 		this.displayAllPlans();
 		
 		try {
@@ -41,7 +37,7 @@ public class AllPlansSchedule extends Screen {
 			e.printStackTrace();
 		}
 		
-		return this.getPreviousScreen();
+		return Screen.MAIN_SCREEN;
 	}
 
 }

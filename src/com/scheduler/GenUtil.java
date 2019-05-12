@@ -31,7 +31,7 @@ public class GenUtil {
 		while (true) {
 			input = scanner.next();
 			
-			if (!input.matches("[0-9]")) {
+			if (!input.matches("[0-9]*")) {
 				System.out.println("Invalid number format. Please try again.");
 			} else {
 				duration = Integer.parseInt(input);

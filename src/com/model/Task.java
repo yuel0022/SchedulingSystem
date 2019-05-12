@@ -17,6 +17,7 @@ public class Task {
 	private List<Task> childTasks;
 	private ProjectPlan plan;
 	boolean deleted = false;
+	boolean isDurationChanged = false;
 	
 	public Task(String code) {
 		this(code, null, 0, null);
@@ -50,12 +51,13 @@ public class Task {
 		
 		newStartDate = (maxEndDate == null) ? this.getPlan().getStartDate() : GenUtil.addDays(maxEndDate, 1);
 		
-		if (newStartDate.compareTo(this.startDate) != 0) {
+		if (newStartDate.compareTo(this.startDate) != 0 || isDurationChanged) {
 			this.startDate = newStartDate;
 			this.endDate = GenUtil.addDays(this.startDate, duration - 1);
 			for (Task childTask : childTasks) {
 				childTask.notifyChanges(this);
 			}
+			isDurationChanged = false;
 		}
 	}
 	
@@ -162,6 +164,7 @@ public class Task {
 
 	public void setDuration(int duration) {
 		this.duration = duration;
+		this.isDurationChanged = true;
 	}
 
 	public Date getStartDate() {
@@ -190,5 +193,9 @@ public class Task {
 	
 	public boolean isDeleted() {
 		return deleted;
+	}
+	
+	public boolean isDurationChanged() {
+		return isDurationChanged;
 	}
 }

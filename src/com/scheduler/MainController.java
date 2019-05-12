@@ -130,6 +130,23 @@ public class MainController {
 		this.tasks.add(task);
 	}
 	
+	public void editTask(String taskCode, String name, int duration, List<String> parentTasks) {
+		Task task = this.getTask(taskCode);
+		
+		task.setName(name);
+		task.setDuration(duration);
+		
+		for (String parentTaskCode : parentTasks) {
+			Task parentTask = this.getTask(parentTaskCode);
+			
+			if (!task.removeParentTask(parentTask)) {
+				task.addParentTask(parentTask);
+			}
+		}
+		
+		task.recalculateSchedule();
+	}
+	
 	/**
 	 * Validates plan or task Code. Code must be four letters long and should consist of only
 	 * alphanumeric characters. 

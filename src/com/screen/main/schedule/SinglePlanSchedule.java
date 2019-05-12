@@ -61,7 +61,7 @@ public class SinglePlanSchedule extends Screen {
 			e.printStackTrace();
 		}
 		
-		return this.getPreviousScreen();
+		return Screen.MAIN_SCREEN;
 	}
 
 }

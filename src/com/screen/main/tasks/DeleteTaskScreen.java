@@ -38,7 +38,7 @@ public class DeleteTaskScreen extends Screen {
 		do {
 			code = scanner.next();
 			
-			if (EXIT_KEY.equals(code.toUpperCase())) {
+			if (EXIT_KEY.equals(code)) {
 				return this.getPreviousScreen();
 			}
 			
