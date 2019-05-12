@@ -6,7 +6,7 @@ import java.util.List;
 
 import com.scheduler.GenUtil;
 
-public class Task {
+public class Task implements Comparable<Task> {
 
 	private String code;
 	private String name;
@@ -152,6 +152,11 @@ public class Task {
 		int result = 1;
 		result = prime * result + ((this.code == null) ? 0 : this.code.hashCode());
 		return result;
+	}
+	
+	@Override
+	public int compareTo(Task task) {
+		return this.getStartDate().compareTo(task.getStartDate());
 	}
 
 	public String getCode() {

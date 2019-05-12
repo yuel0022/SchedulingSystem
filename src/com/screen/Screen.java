@@ -1,6 +1,7 @@
 package com.screen;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import com.model.ProjectPlan;
@@ -61,41 +62,41 @@ public abstract class Screen {
 		List<ProjectPlan> plans = getController().getAllPlans();
 		
 		for (ProjectPlan plan : plans) {
-			this.displayPlan(plan, true);
+			this.displayPlan(plan);
 		}
-	}
-	
-	/**
-	 * Display project plan information without displaying information on its existing tasks.
-	 * @param plan
-	 */
-	protected void displayPlan(ProjectPlan plan) {
-		this.displayPlan(plan, false);
 	}
 	
 	/**
 	 * Displays project plan information.
 	 * @param plan The project plan.
-	 * @param showTasks Show tasks if true.
 	 */
-	protected void displayPlan(ProjectPlan plan, boolean showTasks) {
+	protected void displayPlan(ProjectPlan plan) {
 		if (plan == null) {
 			System.out.println("Error displaying plan - no available information.");
 			return;
 		}
+		plan.updateSchedule();
 		List<Task> tasks = plan.getAllTasks();
 		System.out.println("Code: " + plan.getCode());
 		System.out.println("Name: " + plan.getName());
 		
-		if (showTasks) {
-			if (tasks == null || tasks.isEmpty()) {
-				System.out.println("No registered tasks yet.");
-			} else {
-				System.out.println("Tasks:");
-				for (Task task : tasks) {
-					this.displayTask(task);
+		if (tasks == null || tasks.isEmpty()) {
+			System.out.println("No registered tasks yet.");
+		} else {
+			Date displayDate = plan.getStartDate();
+			Date taskDate = displayDate;
+			System.out.println("\n==============================\n");
+			System.out.println("Tasks:");
+			System.out.println(">>" + format.format(displayDate));
+			for (Task task : tasks) {
+				taskDate = task.getStartDate();
+				if (displayDate.compareTo(taskDate) != 0) {
+					displayDate = taskDate;
+					System.out.println(">>" + format.format(displayDate));
 				}
+				this.displayTask(task);
 			}
+			System.out.println("\n==============================\n");
 		}
 		
 		System.out.println("Start Date: " + format.format(plan.getStartDate()));
@@ -103,32 +104,17 @@ public abstract class Screen {
 	}
 	
 	/**
-	 * Display task information without showing the plan in which it belongs.
-	 * @param task The task.
-	 */
-	protected void displayTask(Task task) {
-		this.displayTask(task, false);
-	}
-	
-	/**
 	 * Display task information.
 	 * @param task The task.
 	 * @param showPlan Value is "true" if you also want to display the plan in which the task belongs.
 	 */
-	protected void displayTask(Task task, boolean showPlan) {
+	private void displayTask(Task task) {
 		if (task == null) {
 			System.out.println("Error displaying task - no available information.");
 			return;
 		}
-		if (showPlan) {
-			System.out.println("Plan Code: " + task.getPlan().getCode());
-		}
-		System.out.println("Task Code: " + task.getCode());
-		System.out.println("Task Name: " + task.getName());
-		System.out.println("Duration: " + task.getDuration() + " days");
-		System.out.println("Start Date: " + format.format(task.getStartDate()));
-		System.out.println("End Date: " + format.format(task.getEndDate()));
-		System.out.println();
+		String displayDate = (task.getStartDate().compareTo(task.getEndDate()) == 0) ? "the same date." : format.format(task.getEndDate());
+		System.out.println(task.getName() + "(" + task.getCode() + ") - ends at " + displayDate);
 	}
 	
 	protected void setPreviousScreen(Screen prevScreen) {

@@ -1,6 +1,7 @@
 package com.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -22,6 +23,22 @@ public class ProjectPlan {
 		this.startDate = startDate;
 		this.endDate = startDate;
 		this.tasks = new ArrayList<Task>();
+	}
+	
+	public void updateSchedule() {
+		if (!tasks.isEmpty()) {
+			Date maxEndDate = this.startDate;
+			Date endDate = null;
+			Collections.sort(tasks);
+			for (Task task : tasks) {
+				endDate = task.getEndDate();
+				if (endDate.compareTo(maxEndDate) > 0) {
+					maxEndDate = endDate;
+				}
+			}
+			
+			this.endDate = maxEndDate;
+		}
 	}
 	
 	@Override

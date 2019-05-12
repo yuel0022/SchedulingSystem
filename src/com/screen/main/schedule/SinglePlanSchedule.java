@@ -50,7 +50,7 @@ public class SinglePlanSchedule extends Screen {
 			}
 		} while(plan == null);
 		
-		this.displayPlan(plan, true);
+		this.displayPlan(plan);
 		
 		System.out.println("Press ENTER to return to previous screen.");
 		
